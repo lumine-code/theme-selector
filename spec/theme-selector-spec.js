@@ -2,25 +2,25 @@ describe("theme-selector", () => {
   let selector;
 
   beforeEach(async () => {
-    jasmine.attachToDOM(atom.views.getView(atom.workspace));
-    atom.config.set("theme.mode", "light");
-    atom.config.set("theme.light", ["one-day-ui", "one-day-syntax"]);
-    atom.config.set("theme.dark", ["one-night-ui", "one-night-syntax"]);
+    jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
+    lumine.config.set("theme.mode", "light");
+    lumine.config.set("theme.light", ["one-day-ui", "one-day-syntax"]);
+    lumine.config.set("theme.dark", ["one-night-ui", "one-night-syntax"]);
 
-    await atom.packages.activatePackage("one-theme");
-    await atom.packages.activatePackage("aura-theme");
-    await atom.packages.activatePackage("nova-theme");
-    await atom.packages.activatePackage("vscode-theme");
-    const pack = await atom.packages.activatePackage("theme-selector");
+    await lumine.packages.activatePackage("one-theme");
+    await lumine.packages.activatePackage("aura-theme");
+    await lumine.packages.activatePackage("nova-theme");
+    await lumine.packages.activatePackage("vscode-theme");
+    const pack = await lumine.packages.activatePackage("theme-selector");
     selector = pack.mainModule.getSelector();
   });
 
   afterEach(async () => {
-    await atom.packages.deactivatePackage("theme-selector");
-    await atom.packages.deactivatePackage("vscode-theme");
-    await atom.packages.deactivatePackage("nova-theme");
-    await atom.packages.deactivatePackage("aura-theme");
-    await atom.packages.deactivatePackage("one-theme");
+    await lumine.packages.deactivatePackage("theme-selector");
+    await lumine.packages.deactivatePackage("vscode-theme");
+    await lumine.packages.deactivatePackage("nova-theme");
+    await lumine.packages.deactivatePackage("aura-theme");
+    await lumine.packages.deactivatePackage("one-theme");
   });
 
   it("lists registered packs and marks the configured pack as active", async () => {
@@ -50,47 +50,47 @@ describe("theme-selector", () => {
 
   it("previews packs while navigating and restores config when cancelled", async () => {
     await selector.show();
-    const nova = atom.themes.getThemePacks().find(({ name }) => name === "Nova");
+    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
 
     await selector.selectList.selectItem(nova);
-    expect(atom.config.get("theme.light")).toEqual(["nova-day-ui", "nova-day-syntax"]);
-    expect(atom.config.get("theme.dark")).toEqual(["nova-night-ui", "nova-night-syntax"]);
+    expect(lumine.config.get("theme.light")).toEqual(["nova-day-ui", "nova-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["nova-night-ui", "nova-night-syntax"]);
 
     selector.selectList.cancelSelection();
-    expect(atom.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
-    expect(atom.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
+    expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
   });
 
   it("keeps the previewed pack when confirmed", async () => {
     await selector.show();
-    const vscode = atom.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
+    const vscode = lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
 
     selector.selectList.props.didChangeSelection(vscode);
     selector.selectList.props.didConfirmSelection(vscode);
 
-    expect(atom.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
-    expect(atom.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
+    expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
     expect(selector.selectList.isVisible()).toBe(false);
   });
 
   it("keeps the selected mode when cancelled", async () => {
     await selector.show();
-    const nova = atom.themes.getThemePacks().find(({ name }) => name === "Nova");
+    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
 
     await selector.selectList.selectItem(nova);
-    atom.commands.dispatch(selector.selectList.element, "theme-selector:use-dark-mode");
+    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-dark-mode");
 
     selector.selectList.cancelSelection();
-    expect(atom.config.get("theme.mode")).toBe("dark");
-    expect(atom.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
-    expect(atom.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
+    expect(lumine.config.get("theme.mode")).toBe("dark");
+    expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
   });
 
   it("selects system, light, and dark modes with selector commands", async () => {
     await selector.show();
 
     const commandFor = (keystrokes) =>
-      atom.keymaps.findKeyBindings({
+      lumine.keymaps.findKeyBindings({
         keystrokes,
         target: selector.selectList.element,
       })[0]?.command;
@@ -98,16 +98,16 @@ describe("theme-selector", () => {
     expect(commandFor("ctrl-2")).toBe("theme-selector:use-light-mode");
     expect(commandFor("ctrl-3")).toBe("theme-selector:use-dark-mode");
 
-    atom.commands.dispatch(selector.selectList.element, "theme-selector:use-dark-mode");
-    expect(atom.config.get("theme.mode")).toBe("dark");
+    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-dark-mode");
+    expect(lumine.config.get("theme.mode")).toBe("dark");
 
-    atom.commands.dispatch(selector.selectList.element, "theme-selector:use-light-mode");
-    expect(atom.config.get("theme.mode")).toBe("light");
+    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-light-mode");
+    expect(lumine.config.get("theme.mode")).toBe("light");
 
-    atom.commands.dispatch(selector.selectList.element, "theme-selector:use-system-mode");
-    expect(atom.config.get("theme.mode")).toBe("system");
+    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-system-mode");
+    expect(lumine.config.get("theme.mode")).toBe("system");
 
     selector.selectList.cancelSelection();
-    expect(atom.config.get("theme.mode")).toBe("system");
+    expect(lumine.config.get("theme.mode")).toBe("system");
   });
 });

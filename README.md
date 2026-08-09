@@ -15,7 +15,7 @@ To install `theme-selector` search for _theme-selector_ in the Install pane of t
 
 ## Commands
 
-Commands available in `atom-workspace`:
+Commands available in `lumine-workspace`:
 
 - `theme-selector:toggle`: opens or closes the theme selector,
 - `theme-selector:use-system-mode`: follows the system appearance,
@@ -44,7 +44,7 @@ Theme packages can declare one or more packs in `package.json`:
 ```
 
 Packages that create packs dynamically can use
-`atom.themes.registerThemePack()` and dispose the returned registration when
+`lumine.themes.registerThemePack()` and dispose the returned registration when
 the pack is no longer available.
 
 ## Customization
