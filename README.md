@@ -11,7 +11,7 @@ Preview and select registered light/dark theme packs.
 
 ## Installation
 
-To install `theme-selector` search for _theme-selector_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/theme-selector`.
+To install `theme-selector` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/theme-selector`.
 
 ## Commands
 
@@ -24,10 +24,7 @@ Commands available in `lumine-workspace`:
 
 ## Usage
 
-Open the selector and navigate through the registered packs to preview them.
-Confirm a pack to keep it, or cancel to restore the previous one. The
-appearance mode is saved as soon as it is chosen, so cancelling never undoes
-it.
+Open the selector and navigate through the registered packs to preview them. Confirm a pack to keep it, or cancel to restore the previous one. The appearance mode is saved as soon as it is chosen, so cancelling never undoes it.
 
 Theme packages can declare one or more packs in `package.json`:
 
@@ -43,14 +40,11 @@ Theme packages can declare one or more packs in `package.json`:
 }
 ```
 
-Packages that create packs dynamically can use
-`lumine.themes.registerThemePack()` and dispose the returned registration when
-the pack is no longer available.
+Packages that create packs dynamically can use `lumine.themes.registerThemePack()` and dispose the returned registration when the pack is no longer available.
 
 ## Customization
 
-The selector uses the shared select-list styles and adds the
-`.theme-selector` class for focused overrides:
+The selector uses the shared select-list styles and adds the `.theme-selector` class for focused overrides:
 
 ```css
 .theme-selector .theme-pack {
