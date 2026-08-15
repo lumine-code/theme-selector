@@ -1,5 +1,9 @@
 {
-  ".theme-selector": {
+  // Scoped to the picker's own mini editor, like every other select-list
+  // keymap in the ecosystem: the bare class also matched the list element,
+  // which is not where focus is.
+  ".theme-selector lumine-text-editor[mini]": {
+    "shift-enter": "theme-selector:preview",
     "ctrl-1": "theme-selector:use-system-mode",
     "ctrl-2": "theme-selector:use-light-mode",
     "ctrl-3": "theme-selector:use-dark-mode"

@@ -48,11 +48,24 @@ describe("theme-selector", () => {
     ).toBe("hidden");
   });
 
-  it("previews packs while navigating and restores config when cancelled", async () => {
+  it("leaves the theme alone while navigating", async () => {
     await selector.show();
     const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
 
     await selector.selectList.selectItem(nova);
+
+    // Moving the selection is not a decision; the window keeps the theme it
+    // had until the pack is previewed or confirmed.
+    expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
+  });
+
+  it("previews the selected pack on demand and restores config when cancelled", async () => {
+    await selector.show();
+    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
+
+    await selector.selectList.selectItem(nova);
+    lumine.commands.dispatch(selector.selectList.element, "theme-selector:preview");
     expect(lumine.config.get("theme.light")).toEqual(["nova-day-ui", "nova-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["nova-night-ui", "nova-night-syntax"]);
 
@@ -61,11 +74,32 @@ describe("theme-selector", () => {
     expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
   });
 
+  it("moves the tick onto the previewed pack", async () => {
+    await selector.show();
+    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
+
+    await selector.selectList.selectItem(nova);
+    lumine.commands.dispatch(selector.selectList.element, "theme-selector:preview");
+    await lumine.views.getNextUpdatePromise();
+
+    expect(selector.selectList.element.querySelector("li.active").textContent).toContain("Nova");
+  });
+
+  it("offers preview as an item action, with its keybinding", async () => {
+    await selector.show();
+
+    const actions = selector.selectList.itemActions();
+    const preview = actions.find((action) => action.command === "theme-selector:preview");
+    expect(preview.name).toBe("Preview");
+    expect(preview.keystrokes).toEqual(["shift-enter"]);
+    // It acts on the selected pack, so it is a row action rather than a list one.
+    expect(preview.scope).toBe("item");
+  });
+
   it("keeps the previewed pack when confirmed", async () => {
     await selector.show();
     const vscode = lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
 
-    selector.selectList.props.didChangeSelection(vscode);
     selector.selectList.props.didConfirmSelection(vscode);
 
     expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
@@ -89,10 +123,12 @@ describe("theme-selector", () => {
   it("selects system, light, and dark modes with selector commands", async () => {
     await selector.show();
 
+    // Resolved against the query editor, which is where focus is and where
+    // the package's keymap points.
     const commandFor = (keystrokes) =>
       lumine.keymaps.findKeyBindings({
         keystrokes,
-        target: selector.selectList.element,
+        target: selector.selectList.refs.queryEditor.element,
       })[0]?.command;
     expect(commandFor("ctrl-1")).toBe("theme-selector:use-system-mode");
     expect(commandFor("ctrl-2")).toBe("theme-selector:use-light-mode");

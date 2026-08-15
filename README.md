@@ -4,7 +4,7 @@ Preview and select registered light/dark theme packs.
 
 ## Features
 
-- **Live preview**: applies each theme pack while navigating the selector.
+- **On-demand preview**: applies the selected pack without closing, so a walk down the list does not repaint the window on every row.
 - **Safe cancellation**: restores the previously configured theme pack.
 - **Paired themes**: changes the configured light and dark theme stacks together.
 - **Appearance modes**: switches between light, dark, and system-controlled modes, and keeps the choice whether the selector is confirmed or cancelled.
@@ -22,9 +22,13 @@ Commands available in `lumine-workspace`:
 - `theme-selector:use-light-mode`: uses light mode,
 - `theme-selector:use-dark-mode`: uses dark mode.
 
+Commands available in `.theme-selector`:
+
+- `theme-selector:preview`: applies the selected pack without closing the selector.
+
 ## Usage
 
-Open the selector and navigate through the registered packs to preview them. Confirm a pack to keep it, or cancel to restore the previous one. The appearance mode is saved as soon as it is chosen, so cancelling never undoes it.
+Open the selector, and preview a pack to see it applied without leaving the list. Confirm a pack to keep it, or cancel to restore the previous one. The appearance mode is saved as soon as it is chosen, so cancelling never undoes it.
 
 Theme packages can declare one or more packs in `package.json`:
 
