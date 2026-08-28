@@ -24,6 +24,7 @@ Commands available in `lumine-workspace`:
 
 Commands available in `.theme-selector`:
 
+- `theme-selector:use-selected-theme-pack`: applies the selected pack, keeps it, and closes the selector,
 - `theme-selector:preview`: applies the selected pack without closing the selector.
 
 ## Usage

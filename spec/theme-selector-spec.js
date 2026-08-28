@@ -1,3 +1,7 @@
+const path = require("path");
+
+const workspaceRoot = path.resolve(__dirname, "..", "..");
+
 describe("theme-selector", () => {
   let selector;
 
@@ -7,11 +11,11 @@ describe("theme-selector", () => {
     lumine.config.set("theme.light", ["one-day-ui", "one-day-syntax"]);
     lumine.config.set("theme.dark", ["one-night-ui", "one-night-syntax"]);
 
-    await lumine.packages.activatePackage("one-theme");
-    await lumine.packages.activatePackage("aura-theme");
-    await lumine.packages.activatePackage("nova-theme");
-    await lumine.packages.activatePackage("vscode-theme");
-    const pack = await lumine.packages.activatePackage("theme-selector");
+    await lumine.packages.activatePackage(path.join(workspaceRoot, "one-theme"));
+    await lumine.packages.activatePackage(path.join(workspaceRoot, "aura-theme"));
+    await lumine.packages.activatePackage(path.join(workspaceRoot, "nova-theme"));
+    await lumine.packages.activatePackage(path.join(workspaceRoot, "vscode-theme"));
+    const pack = await lumine.packages.activatePackage(path.join(workspaceRoot, "theme-selector"));
     selector = pack.mainModule.getSelector();
   });
 
@@ -80,20 +84,50 @@ describe("theme-selector", () => {
 
     await selector.selectList.selectItem(nova);
     lumine.commands.dispatch(selector.selectList.element, "theme-selector:preview");
-    await lumine.views.getNextUpdatePromise();
+    await selector.selectList.update({});
 
     expect(selector.selectList.element.querySelector("li.active").textContent).toContain("Nova");
   });
 
-  it("offers preview as an item action, with its keybinding", async () => {
+  it("offers the primary, preview, and appearance-mode actions with their keybindings", async () => {
     await selector.show();
 
     const actions = selector.selectList.itemActions();
-    const preview = actions.find((action) => action.command === "theme-selector:preview");
+    const byCommand = new Map(actions.map((action) => [action.command, action]));
+    expect([...byCommand.keys()]).toEqual([
+      "theme-selector:use-selected-theme-pack",
+      "theme-selector:preview",
+      "theme-selector:use-system-mode",
+      "theme-selector:use-light-mode",
+      "theme-selector:use-dark-mode",
+    ]);
+
+    const primary = byCommand.get("theme-selector:use-selected-theme-pack");
+    expect(primary.description).toBe(
+      "Apply the selected theme pack, keep it, and close the picker.",
+    );
+    expect(primary.keystrokes).toEqual(["enter"]);
+
+    const preview = byCommand.get("theme-selector:preview");
     expect(preview.name).toBe("Preview");
     expect(preview.keystrokes).toEqual(["shift-enter"]);
-    // It acts on the selected pack, so it is a row action rather than a list one.
     expect(preview.scope).toBe("item");
+
+    expect(byCommand.get("theme-selector:use-system-mode").keystrokes).toEqual(["ctrl-1"]);
+    expect(byCommand.get("theme-selector:use-light-mode").keystrokes).toEqual(["ctrl-2"]);
+    expect(byCommand.get("theme-selector:use-dark-mode").keystrokes).toEqual(["ctrl-3"]);
+    expect(byCommand.get("theme-selector:use-system-mode").scope).toBe("list");
+  });
+
+  it("keeps only appearance-mode actions when no pack is selected", async () => {
+    await selector.show();
+    await selector.selectList.update({ items: [] });
+
+    expect(selector.selectList.itemActions().map((action) => action.command)).toEqual([
+      "theme-selector:use-system-mode",
+      "theme-selector:use-light-mode",
+      "theme-selector:use-dark-mode",
+    ]);
   });
 
   it("keeps the previewed pack when confirmed", async () => {
