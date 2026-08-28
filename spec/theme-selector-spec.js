@@ -1,6 +1,6 @@
 const path = require("path");
 
-const workspaceRoot = path.resolve(__dirname, "..", "..");
+const packageRoot = path.resolve(__dirname, "..");
 
 describe("theme-selector", () => {
   let selector;
@@ -11,11 +11,11 @@ describe("theme-selector", () => {
     lumine.config.set("theme.light", ["one-day-ui", "one-day-syntax"]);
     lumine.config.set("theme.dark", ["one-night-ui", "one-night-syntax"]);
 
-    await lumine.packages.activatePackage(path.join(workspaceRoot, "one-theme"));
-    await lumine.packages.activatePackage(path.join(workspaceRoot, "aura-theme"));
-    await lumine.packages.activatePackage(path.join(workspaceRoot, "nova-theme"));
-    await lumine.packages.activatePackage(path.join(workspaceRoot, "vscode-theme"));
-    const pack = await lumine.packages.activatePackage(path.join(workspaceRoot, "theme-selector"));
+    await lumine.packages.activatePackage("one-theme");
+    await lumine.packages.activatePackage("aura-theme");
+    await lumine.packages.activatePackage("nova-theme");
+    await lumine.packages.activatePackage("vscode-theme");
+    const pack = await lumine.packages.activatePackage(packageRoot);
     selector = pack.mainModule.getSelector();
   });
 
