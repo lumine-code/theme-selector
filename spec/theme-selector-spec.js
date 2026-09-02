@@ -162,7 +162,7 @@ describe("theme-selector", () => {
     const commandFor = (keystrokes) =>
       lumine.keymaps.findKeyBindings({
         keystrokes,
-        target: selector.selectList.refs.queryEditor.element,
+        target: selector.selectList.getQueryEditor().element,
       })[0]?.command;
     expect(commandFor("ctrl-1")).toBe("theme-selector:use-system-mode");
     expect(commandFor("ctrl-2")).toBe("theme-selector:use-light-mode");
