@@ -73,7 +73,7 @@ describe("theme-selector", () => {
     expect(lumine.config.get("theme.light")).toEqual(["nova-day-ui", "nova-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["nova-night-ui", "nova-night-syntax"]);
 
-    selector.selectList.cancelSelection();
+    selector.selectListHost.cancel();
     expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
   });
@@ -141,7 +141,7 @@ describe("theme-selector", () => {
 
     expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
-    expect(selector.selectList.isVisible()).toBe(false);
+    expect(selector.selectListHost.isVisible()).toBe(false);
   });
 
   it("keeps the selected mode when cancelled", async () => {
@@ -154,7 +154,7 @@ describe("theme-selector", () => {
       "theme-selector:use-dark-mode",
     );
 
-    selector.selectList.cancelSelection();
+    selector.selectListHost.cancel();
     expect(lumine.config.get("theme.mode")).toBe("dark");
     expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
@@ -192,7 +192,7 @@ describe("theme-selector", () => {
     );
     expect(lumine.config.get("theme.mode")).toBe("system");
 
-    selector.selectList.cancelSelection();
+    selector.selectListHost.cancel();
     expect(lumine.config.get("theme.mode")).toBe("system");
   });
 });
