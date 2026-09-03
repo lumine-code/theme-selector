@@ -30,13 +30,13 @@ describe("theme-selector", () => {
   it("lists registered packs and marks the configured pack as active", async () => {
     await selector.show();
 
-    expect(selector.selectList.items.map(({ name }) => name)).toEqual([
+    expect(selector.selectList.getItems().map(({ name }) => name)).toEqual([
       "One",
       "Aura",
       "Nova",
       "VS Code Modern",
     ]);
-    const activeItem = selector.selectList.element.querySelector("li.active");
+    const activeItem = selector.selectList.getElement().querySelector("li.active");
     expect(activeItem.textContent).toContain("One");
     const status = activeItem.querySelector(".primary-line > .theme-pack-status.icon.icon-check");
     const title = activeItem.querySelector(".primary-line > .theme-pack-title");
@@ -47,7 +47,7 @@ describe("theme-selector", () => {
     expect(activeItem.querySelector(".secondary-line.no-icon")).not.toBeNull();
     expect(
       getComputedStyle(
-        selector.selectList.element.querySelector("li:not(.active) .theme-pack-status"),
+        selector.selectList.getElement().querySelector("li:not(.active) .theme-pack-status"),
       ).visibility,
     ).toBe("hidden");
   });
@@ -69,7 +69,7 @@ describe("theme-selector", () => {
     const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
 
     await selector.selectList.selectItem(nova);
-    lumine.commands.dispatch(selector.selectList.element, "theme-selector:preview");
+    await lumine.commands.dispatch(selector.selectList.getElement(), "theme-selector:preview");
     expect(lumine.config.get("theme.light")).toEqual(["nova-day-ui", "nova-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["nova-night-ui", "nova-night-syntax"]);
 
@@ -83,16 +83,18 @@ describe("theme-selector", () => {
     const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
 
     await selector.selectList.selectItem(nova);
-    lumine.commands.dispatch(selector.selectList.element, "theme-selector:preview");
-    await selector.selectList.update({});
+    await lumine.commands.dispatch(selector.selectList.getElement(), "theme-selector:preview");
+    await selector.selectList.refresh();
 
-    expect(selector.selectList.element.querySelector("li.active").textContent).toContain("Nova");
+    expect(selector.selectList.getElement().querySelector("li.active").textContent).toContain(
+      "Nova",
+    );
   });
 
   it("offers the primary, preview, and appearance-mode actions with their keybindings", async () => {
     await selector.show();
 
-    const actions = selector.selectList.itemActions();
+    const actions = selector.selectList.getAvailableActions();
     const byCommand = new Map(actions.map((action) => [action.command, action]));
     expect([...byCommand.keys()]).toEqual([
       "theme-selector:use-selected-theme-pack",
@@ -106,24 +108,24 @@ describe("theme-selector", () => {
     expect(primary.description).toBe(
       "Apply the selected theme pack, keep it, and close the picker.",
     );
-    expect(primary.keystrokes).toEqual(["enter"]);
+    expect(primary.primary).toBe(true);
 
     const preview = byCommand.get("theme-selector:preview");
     expect(preview.name).toBe("Preview");
     expect(preview.keystrokes).toEqual(["shift-enter"]);
-    expect(preview.scope).toBe("item");
+    expect(preview.context).toBe("item");
 
     expect(byCommand.get("theme-selector:use-system-mode").keystrokes).toEqual(["ctrl-1"]);
     expect(byCommand.get("theme-selector:use-light-mode").keystrokes).toEqual(["ctrl-2"]);
     expect(byCommand.get("theme-selector:use-dark-mode").keystrokes).toEqual(["ctrl-3"]);
-    expect(byCommand.get("theme-selector:use-system-mode").scope).toBe("list");
+    expect(byCommand.get("theme-selector:use-system-mode").context).toBe("dialog");
   });
 
   it("keeps only appearance-mode actions when no pack is selected", async () => {
     await selector.show();
-    await selector.selectList.update({ items: [] });
+    await selector.selectList.setItems([]);
 
-    expect(selector.selectList.itemActions().map((action) => action.command)).toEqual([
+    expect(selector.selectList.getAvailableActions().map((action) => action.command)).toEqual([
       "theme-selector:use-system-mode",
       "theme-selector:use-light-mode",
       "theme-selector:use-dark-mode",
@@ -134,7 +136,8 @@ describe("theme-selector", () => {
     await selector.show();
     const vscode = lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
 
-    selector.selectList.props.didConfirmSelection(vscode);
+    await selector.selectList.selectItem(vscode);
+    await selector.selectList.confirmSelection();
 
     expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
@@ -146,7 +149,10 @@ describe("theme-selector", () => {
     const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
 
     await selector.selectList.selectItem(nova);
-    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-dark-mode");
+    await lumine.commands.dispatch(
+      selector.selectList.getElement(),
+      "theme-selector:use-dark-mode",
+    );
 
     selector.selectList.cancelSelection();
     expect(lumine.config.get("theme.mode")).toBe("dark");
@@ -168,13 +174,22 @@ describe("theme-selector", () => {
     expect(commandFor("ctrl-2")).toBe("theme-selector:use-light-mode");
     expect(commandFor("ctrl-3")).toBe("theme-selector:use-dark-mode");
 
-    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-dark-mode");
+    await lumine.commands.dispatch(
+      selector.selectList.getElement(),
+      "theme-selector:use-dark-mode",
+    );
     expect(lumine.config.get("theme.mode")).toBe("dark");
 
-    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-light-mode");
+    await lumine.commands.dispatch(
+      selector.selectList.getElement(),
+      "theme-selector:use-light-mode",
+    );
     expect(lumine.config.get("theme.mode")).toBe("light");
 
-    lumine.commands.dispatch(selector.selectList.element, "theme-selector:use-system-mode");
+    await lumine.commands.dispatch(
+      selector.selectList.getElement(),
+      "theme-selector:use-system-mode",
+    );
     expect(lumine.config.get("theme.mode")).toBe("system");
 
     selector.selectList.cancelSelection();
