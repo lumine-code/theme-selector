@@ -26,9 +26,6 @@
   "engines": {
     "lumine": "^1.0.0"
   },
-  "backgroundTips": [
-    "{% if keys['theme-selector:toggle'] %}You can preview light and dark theme packs live with {{ 'theme-selector:toggle' | keystroke }}{% else %}You can preview light and dark theme packs live in the theme selector and keep the one you like.{% endif %}"
-  ],
   "specPackages": [
     "aura-theme",
     "nova-theme",
@@ -39,6 +36,13 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+  },
+  "providedServices": {
+    "background-tips.provider": {
+      "versions": {
+        "1.0.0": "provideBackgroundTips"
+      }
+    }
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
