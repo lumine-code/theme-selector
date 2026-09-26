@@ -13,7 +13,6 @@ describe("theme-selector", () => {
 
     await lumine.packages.activatePackage("one-theme");
     await lumine.packages.activatePackage("aura-theme");
-    await lumine.packages.activatePackage("nova-theme");
     await lumine.packages.activatePackage("vscode-theme");
     const pack = await lumine.packages.activatePackage(packageRoot);
     selector = pack.mainModule.getSelector();
@@ -22,7 +21,6 @@ describe("theme-selector", () => {
   afterEach(async () => {
     await lumine.packages.deactivatePackage("theme-selector");
     await lumine.packages.deactivatePackage("vscode-theme");
-    await lumine.packages.deactivatePackage("nova-theme");
     await lumine.packages.deactivatePackage("aura-theme");
     await lumine.packages.deactivatePackage("one-theme");
   });
@@ -33,7 +31,6 @@ describe("theme-selector", () => {
     expect(selector.selectList.getItems().map(({ name }) => name)).toEqual([
       "One",
       "Aura",
-      "Nova",
       "VS Code Modern",
     ]);
     const activeItem = selector.selectList.getElement().querySelector("li.active");
@@ -54,9 +51,9 @@ describe("theme-selector", () => {
 
   it("leaves the theme alone while navigating", async () => {
     await selector.show();
-    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
+    const aura = lumine.themes.getThemePacks().find(({ name }) => name === "Aura");
 
-    await selector.selectList.selectItem(nova);
+    await selector.selectList.selectItem(aura);
 
     // Moving the selection is not a decision; the window keeps the theme it
     // had until the pack is previewed or confirmed.
@@ -66,12 +63,12 @@ describe("theme-selector", () => {
 
   it("previews the selected pack on demand and restores config when cancelled", async () => {
     await selector.show();
-    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
+    const aura = lumine.themes.getThemePacks().find(({ name }) => name === "Aura");
 
-    await selector.selectList.selectItem(nova);
+    await selector.selectList.selectItem(aura);
     await lumine.commands.dispatch(selector.selectList.getElement(), "theme-selector:preview");
-    expect(lumine.config.get("theme.light")).toEqual(["nova-day-ui", "nova-day-syntax"]);
-    expect(lumine.config.get("theme.dark")).toEqual(["nova-night-ui", "nova-night-syntax"]);
+    expect(lumine.config.get("theme.light")).toEqual(["aura-day-ui", "aura-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["aura-night-ui", "aura-night-syntax"]);
 
     selector.selectListHost.cancel();
     expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
@@ -80,14 +77,14 @@ describe("theme-selector", () => {
 
   it("moves the tick onto the previewed pack", async () => {
     await selector.show();
-    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
+    const aura = lumine.themes.getThemePacks().find(({ name }) => name === "Aura");
 
-    await selector.selectList.selectItem(nova);
+    await selector.selectList.selectItem(aura);
     await lumine.commands.dispatch(selector.selectList.getElement(), "theme-selector:preview");
     await selector.selectList.refresh();
 
     expect(selector.selectList.getElement().querySelector("li.active").textContent).toContain(
-      "Nova",
+      "Aura",
     );
   });
 
@@ -146,9 +143,9 @@ describe("theme-selector", () => {
 
   it("keeps the selected mode when cancelled", async () => {
     await selector.show();
-    const nova = lumine.themes.getThemePacks().find(({ name }) => name === "Nova");
+    const aura = lumine.themes.getThemePacks().find(({ name }) => name === "Aura");
 
-    await selector.selectList.selectItem(nova);
+    await selector.selectList.selectItem(aura);
     await lumine.commands.dispatch(
       selector.selectList.getElement(),
       "theme-selector:use-dark-mode",

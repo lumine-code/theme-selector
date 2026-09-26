@@ -28,7 +28,6 @@
   },
   "specPackages": [
     "aura-theme",
-    "nova-theme",
     "vscode-theme"
   ],
   "scripts": {
