@@ -2,9 +2,10 @@
   "title": "theme-selector",
   "description": "Choose a theme and color mode.",
   "recordedOn": "2026-10-13",
-  "sourceRevision": "79cb0e2a104a929f713acf79a11de4832294cec6",
+  "sourceRevision": "b272abcc80e8402fe748e1188a64bd938360dbbd",
   "mode": "normal",
   "fontSettings": "default",
+  "themeSourceRevision": "6564a9e21899b5541e9c8f8006f9be6d6d72e6ad",
   "images": [
     {
       "file": "demo.png",
