@@ -1,0 +1,39 @@
+{
+  "menu": [
+    {
+      "label": "View",
+      "submenu": [
+        {
+          "label": "Select Theme…",
+          "command": "theme-selector:toggle"
+        }
+      ]
+    },
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Theme Selector",
+          "submenu": [
+            {
+              "label": "Select Theme…",
+              "command": "theme-selector:toggle"
+            },
+            {
+              "label": "Use System Mode",
+              "command": "theme-selector:use-system-mode"
+            },
+            {
+              "label": "Use Light Mode",
+              "command": "theme-selector:use-light-mode"
+            },
+            {
+              "label": "Use Dark Mode",
+              "command": "theme-selector:use-dark-mode"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
