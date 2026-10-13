@@ -9,6 +9,8 @@ Preview and select registered light/dark theme packs.
 - **Paired themes**: changes the configured light and dark theme stacks together.
 - **Appearance modes**: switches between light, dark, and system-controlled modes, and keeps the choice whether the selector is confirmed or cancelled.
 
+![Choose a theme and color mode.](.github/demo.png)
+
 ## Installation
 
 To install `theme-selector` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/theme-selector`.

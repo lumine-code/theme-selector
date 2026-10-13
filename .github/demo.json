@@ -1,0 +1,16 @@
+{
+  "title": "theme-selector",
+  "description": "Choose a theme and color mode.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "79cb0e2a104a929f713acf79a11de4832294cec6",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "Choose a theme and color mode.",
+      "width": 1100,
+      "height": 720
+    }
+  ]
+}
