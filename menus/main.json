@@ -5,7 +5,9 @@
       "submenu": [
         {
           "label": "Select Theme…",
-          "command": "theme-selector:toggle"
+          "command": "theme-selector:toggle",
+          "group": "appearance",
+          "order": 30
         }
       ]
     },
