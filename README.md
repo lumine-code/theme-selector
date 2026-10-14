@@ -19,10 +19,9 @@ To install `theme-selector` search for it in the Install pane of the Lumine sett
 
 Commands available in `lumine-workspace`:
 
-- `theme-selector:toggle`: opens or closes the theme selector,
-- `theme-selector:use-system-mode`: follows the system appearance,
-- `theme-selector:use-light-mode`: uses light mode,
-- `theme-selector:use-dark-mode`: uses dark mode.
+- `theme-selector:toggle`: opens or closes the theme selector.
+
+Appearance mode actions reuse Settings View's `settings-view:use-system-mode`, `settings-view:use-light-mode`, and `settings-view:use-dark-mode` commands. In the selector, `Ctrl+1`, `Ctrl+2`, and `Ctrl+3` switch between system, light, and dark modes.
 
 Commands available in `.theme-selector`:
 

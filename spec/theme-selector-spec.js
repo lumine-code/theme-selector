@@ -14,12 +14,14 @@ describe("theme-selector", () => {
     await lumine.packages.activatePackage("one-theme");
     await lumine.packages.activatePackage("aura-theme");
     await lumine.packages.activatePackage("vscode-theme");
+    await lumine.packages.activatePackage("settings-view");
     const pack = await lumine.packages.activatePackage(packageRoot);
     selector = pack.mainModule.getSelector();
   });
 
   afterEach(async () => {
     await lumine.packages.deactivatePackage("theme-selector");
+    await lumine.packages.deactivatePackage("settings-view");
     await lumine.packages.deactivatePackage("vscode-theme");
     await lumine.packages.deactivatePackage("aura-theme");
     await lumine.packages.deactivatePackage("one-theme");
@@ -96,9 +98,9 @@ describe("theme-selector", () => {
     expect([...byCommand.keys()]).toEqual([
       "theme-selector:use-selected-theme-pack",
       "theme-selector:preview",
-      "theme-selector:use-system-mode",
-      "theme-selector:use-light-mode",
-      "theme-selector:use-dark-mode",
+      "settings-view:use-system-mode",
+      "settings-view:use-light-mode",
+      "settings-view:use-dark-mode",
     ]);
 
     const primary = byCommand.get("theme-selector:use-selected-theme-pack");
@@ -112,10 +114,10 @@ describe("theme-selector", () => {
     expect(preview.keystrokes).toEqual(["shift-enter"]);
     expect(preview.context).toBe("item");
 
-    expect(byCommand.get("theme-selector:use-system-mode").keystrokes).toEqual(["ctrl-1"]);
-    expect(byCommand.get("theme-selector:use-light-mode").keystrokes).toEqual(["ctrl-2"]);
-    expect(byCommand.get("theme-selector:use-dark-mode").keystrokes).toEqual(["ctrl-3"]);
-    expect(byCommand.get("theme-selector:use-system-mode").context).toBe("dialog");
+    expect(byCommand.get("settings-view:use-system-mode").keystrokes).toEqual(["ctrl-1"]);
+    expect(byCommand.get("settings-view:use-light-mode").keystrokes).toEqual(["ctrl-2"]);
+    expect(byCommand.get("settings-view:use-dark-mode").keystrokes).toEqual(["ctrl-3"]);
+    expect(byCommand.get("settings-view:use-system-mode").context).toBe("dialog");
   });
 
   it("keeps only appearance-mode actions when no pack is selected", async () => {
@@ -123,9 +125,9 @@ describe("theme-selector", () => {
     await selector.selectList.setItems([]);
 
     expect(selector.selectList.getAvailableActions().map((action) => action.command)).toEqual([
-      "theme-selector:use-system-mode",
-      "theme-selector:use-light-mode",
-      "theme-selector:use-dark-mode",
+      "settings-view:use-system-mode",
+      "settings-view:use-light-mode",
+      "settings-view:use-dark-mode",
     ]);
   });
 
@@ -146,10 +148,7 @@ describe("theme-selector", () => {
     const aura = lumine.themes.getThemePacks().find(({ name }) => name === "Aura");
 
     await selector.selectList.selectItem(aura);
-    await lumine.commands.dispatch(
-      selector.selectList.getElement(),
-      "theme-selector:use-dark-mode",
-    );
+    await lumine.commands.dispatch(selector.selectList.getElement(), "settings-view:use-dark-mode");
 
     selector.selectListHost.cancel();
     expect(lumine.config.get("theme.mode")).toBe("dark");
@@ -157,7 +156,7 @@ describe("theme-selector", () => {
     expect(lumine.config.get("theme.dark")).toEqual(["one-night-ui", "one-night-syntax"]);
   });
 
-  it("selects system, light, and dark modes with selector commands", async () => {
+  it("selects system, light, and dark modes with shared settings commands", async () => {
     await selector.show();
 
     // Resolved against the query editor, which is where focus is and where
@@ -167,25 +166,22 @@ describe("theme-selector", () => {
         keystrokes,
         target: selector.selectList.getQueryEditor().element,
       })[0]?.command;
-    expect(commandFor("ctrl-1")).toBe("theme-selector:use-system-mode");
-    expect(commandFor("ctrl-2")).toBe("theme-selector:use-light-mode");
-    expect(commandFor("ctrl-3")).toBe("theme-selector:use-dark-mode");
+    expect(commandFor("ctrl-1")).toBe("settings-view:use-system-mode");
+    expect(commandFor("ctrl-2")).toBe("settings-view:use-light-mode");
+    expect(commandFor("ctrl-3")).toBe("settings-view:use-dark-mode");
 
-    await lumine.commands.dispatch(
-      selector.selectList.getElement(),
-      "theme-selector:use-dark-mode",
-    );
+    await lumine.commands.dispatch(selector.selectList.getElement(), "settings-view:use-dark-mode");
     expect(lumine.config.get("theme.mode")).toBe("dark");
 
     await lumine.commands.dispatch(
       selector.selectList.getElement(),
-      "theme-selector:use-light-mode",
+      "settings-view:use-light-mode",
     );
     expect(lumine.config.get("theme.mode")).toBe("light");
 
     await lumine.commands.dispatch(
       selector.selectList.getElement(),
-      "theme-selector:use-system-mode",
+      "settings-view:use-system-mode",
     );
     expect(lumine.config.get("theme.mode")).toBe("system");
 
