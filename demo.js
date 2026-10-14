@@ -1,7 +1,7 @@
 // Authentic package usage. Run with lumine/script/demo.js; fixtures stay in demo/.
 module.exports = {
   version: 1,
-  dependencies: [],
+  dependencies: ["aura-theme", "vscode-theme"],
   viewport: { width: 1100, height: 720 },
   async before() {},
   async prepare(context) {
