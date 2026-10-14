@@ -1,17 +1,71 @@
 {
   "title": "theme-selector",
   "description": "Choose a theme and color mode.",
-  "recordedOn": "2026-10-13",
-  "sourceRevision": "b272abcc80e8402fe748e1188a64bd938360dbbd",
+  "recordedOn": "2026-10-14",
+  "sourceRevision": "e1c4f28e0e95d13d9370282c35851b0ad95b0b48",
+  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
   "mode": "normal",
   "fontSettings": "default",
-  "themeSourceRevision": "6564a9e21899b5541e9c8f8006f9be6d6d72e6ad",
+  "scenario": "demo.js",
+  "recipeHash": "19ed81c7e2f88b3d75f023284efc37a658791fe98d7b30eb7d8ea5529c147137",
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130",
+    "devicePixelRatio": 1,
+    "locale": "en-GB",
+    "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
+    "fontSize": 14,
+    "themes": ["one-day-syntax", "one-day-ui"]
+  },
+  "viewport": { "width": 1100, "height": 720 },
+  "cornerRadius": 10,
+  "sources": {
+    "editor": {
+      "revision": "d0b1751fffac65f10a405545e5f01cf7ad05c0bb",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "package": {
+      "revision": "e1c4f28e0e95d13d9370282c35851b0ad95b0b48",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "theme-selector": {
+      "revision": "e1c4f28e0e95d13d9370282c35851b0ad95b0b48",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "aura-theme": {
+      "revision": "a95e92b66c9c479305b26d20d541da75542409d4",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "one-theme": {
+      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "vscode-theme": {
+      "revision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "signal.js",
+      "sha256": "2a36953daadd1ae53070d0ff7ceab4624395fdb957104aa6e8ec92d785cadf1d"
+    }
+  ],
   "images": [
     {
       "file": "demo.png",
       "label": "Choose a theme and color mode.",
       "width": 1100,
-      "height": 720
+      "height": 720,
+      "sha256": "9203307cd49027d7b0b2bb3f05db516af1138e85e609d5d41e7cca9f0dce6a48"
     }
   ]
 }
