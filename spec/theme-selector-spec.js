@@ -3,6 +3,7 @@ const path = require("path");
 const packageRoot = path.resolve(__dirname, "..");
 
 describe("theme-selector", () => {
+  const primaryModifier = process.platform === "darwin" ? "cmd" : "ctrl";
   let selector;
 
   beforeEach(async () => {
@@ -114,9 +115,15 @@ describe("theme-selector", () => {
     expect(preview.keystrokes).toEqual(["shift-enter"]);
     expect(preview.context).toBe("item");
 
-    expect(byCommand.get("settings-view:use-system-mode").keystrokes).toEqual(["ctrl-1"]);
-    expect(byCommand.get("settings-view:use-light-mode").keystrokes).toEqual(["ctrl-2"]);
-    expect(byCommand.get("settings-view:use-dark-mode").keystrokes).toEqual(["ctrl-3"]);
+    expect(byCommand.get("settings-view:use-system-mode").keystrokes).toEqual([
+      `${primaryModifier}-1`,
+    ]);
+    expect(byCommand.get("settings-view:use-light-mode").keystrokes).toEqual([
+      `${primaryModifier}-2`,
+    ]);
+    expect(byCommand.get("settings-view:use-dark-mode").keystrokes).toEqual([
+      `${primaryModifier}-3`,
+    ]);
     expect(byCommand.get("settings-view:use-system-mode").context).toBe("dialog");
   });
 
@@ -166,9 +173,9 @@ describe("theme-selector", () => {
         keystrokes,
         target: selector.selectList.getQueryEditor().element,
       })[0]?.command;
-    expect(commandFor("ctrl-1")).toBe("settings-view:use-system-mode");
-    expect(commandFor("ctrl-2")).toBe("settings-view:use-light-mode");
-    expect(commandFor("ctrl-3")).toBe("settings-view:use-dark-mode");
+    expect(commandFor(`${primaryModifier}-1`)).toBe("settings-view:use-system-mode");
+    expect(commandFor(`${primaryModifier}-2`)).toBe("settings-view:use-light-mode");
+    expect(commandFor(`${primaryModifier}-3`)).toBe("settings-view:use-dark-mode");
 
     await lumine.commands.dispatch(selector.selectList.getElement(), "settings-view:use-dark-mode");
     expect(lumine.config.get("theme.mode")).toBe("dark");

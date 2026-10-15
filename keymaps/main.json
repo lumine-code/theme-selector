@@ -4,8 +4,8 @@
   // which is not where focus is.
   ".theme-selector lumine-text-editor[mini]": {
     "shift-enter": "theme-selector:preview",
-    "ctrl-1": "settings-view:use-system-mode",
-    "ctrl-2": "settings-view:use-light-mode",
-    "ctrl-3": "settings-view:use-dark-mode"
+    "cmdorctrl-1": "settings-view:use-system-mode",
+    "cmdorctrl-2": "settings-view:use-light-mode",
+    "cmdorctrl-3": "settings-view:use-dark-mode"
   }
 }
