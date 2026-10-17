@@ -175,6 +175,43 @@ describe("theme-selector", () => {
     expect(lumine.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
   });
 
+  for (const back of ["breadcrumb", "shift-escape"]) {
+    it(`restores the committed pack after a later preview and ${back} back`, async () => {
+      const parent = lumine.workspace.addInputDialog({}, { crumb: "Parent" });
+      try {
+        await parent.show();
+        await selector.selectListHost.show({ crumb: "Themes" });
+        const model = selector.selectList;
+        await model.runAction("select-list:toggle-keep-open");
+        const packs = lumine.themes.getThemePacks();
+        await model.selectItem(packs.find((pack) => pack.name === "Aura"));
+        await model.confirmSelection();
+        await model.selectItem(packs.find((pack) => pack.name === "VS Code Modern"));
+        await model.runAction("theme-selector:preview");
+        expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
+
+        if (back === "breadcrumb") {
+          expect(lumine.workspace.popModal()).toBe(true);
+        } else {
+          const target = model.getQueryEditor().getElement();
+          expect(
+            lumine.keymaps.findKeyBindings({ keystrokes: "shift-escape", target })[0].command,
+          ).toBe("modal:go-back");
+          await lumine.commands.dispatch(target, "modal:go-back");
+        }
+
+        expect(parent.isVisible()).toBe(true);
+        expect(selector.selectListHost.isVisible()).toBe(false);
+        expect(lumine.config.get("theme.light")).toEqual(["aura-day-ui", "aura-day-syntax"]);
+        expect(lumine.config.get("theme.dark")).toEqual(["aura-night-ui", "aura-night-syntax"]);
+        selector.selectListHost.cancel();
+        expect(lumine.config.get("theme.light")).toEqual(["aura-day-ui", "aura-day-syntax"]);
+      } finally {
+        await parent.destroy();
+      }
+    });
+  }
+
   it("keeps the selected mode when cancelled", async () => {
     await selector.show();
     const aura = lumine.themes.getThemePacks().find(({ name }) => name === "Aura");
