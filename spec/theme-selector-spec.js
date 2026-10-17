@@ -96,7 +96,9 @@ describe("theme-selector", () => {
 
     const actions = selector.selectList.getAvailableActions();
     const byCommand = new Map(actions.map((action) => [action.command, action]));
-    expect([...byCommand.keys()]).toEqual([
+    expect(
+      [...byCommand.keys()].filter((command) => command !== "select-list:toggle-keep-open"),
+    ).toEqual([
       "theme-selector:use-selected-theme-pack",
       "theme-selector:preview",
       "settings-view:use-system-mode",
@@ -105,9 +107,7 @@ describe("theme-selector", () => {
     ]);
 
     const primary = byCommand.get("theme-selector:use-selected-theme-pack");
-    expect(primary.description).toBe(
-      "Apply the selected theme pack, keep it, and close the picker.",
-    );
+    expect(primary.description).toBe("Apply and keep the selected theme pack.");
     expect(primary.primary).toBe(true);
 
     const preview = byCommand.get("theme-selector:preview");
@@ -131,7 +131,12 @@ describe("theme-selector", () => {
     await selector.show();
     await selector.selectList.setItems([]);
 
-    expect(selector.selectList.getAvailableActions().map((action) => action.command)).toEqual([
+    expect(
+      selector.selectList
+        .getAvailableActions()
+        .map((action) => action.command)
+        .filter((command) => command !== "select-list:toggle-keep-open"),
+    ).toEqual([
       "settings-view:use-system-mode",
       "settings-view:use-light-mode",
       "settings-view:use-dark-mode",
@@ -148,6 +153,26 @@ describe("theme-selector", () => {
     expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
     expect(lumine.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
     expect(selector.selectListHost.isVisible()).toBe(false);
+  });
+
+  it("restores the latest committed pack after further previews in keep-open mode", async () => {
+    await selector.show();
+    const model = selector.selectList;
+    await model.runAction("select-list:toggle-keep-open");
+    const packs = lumine.themes.getThemePacks();
+    for (const name of ["Aura", "VS Code Modern"]) {
+      await model.selectItem(packs.find((pack) => pack.name === name));
+      await model.confirmSelection();
+      expect(selector.selectListHost.isVisible()).toBe(true);
+      expect(model.getElement().querySelector("li.active").textContent).toContain(name);
+    }
+
+    await model.selectItem(packs.find((pack) => pack.name === "One"));
+    await model.runAction("theme-selector:preview");
+    expect(lumine.config.get("theme.light")).toEqual(["one-day-ui", "one-day-syntax"]);
+    selector.selectListHost.cancel();
+    expect(lumine.config.get("theme.light")).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
+    expect(lumine.config.get("theme.dark")).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
   });
 
   it("keeps the selected mode when cancelled", async () => {
