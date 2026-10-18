@@ -1,9 +1,9 @@
 {
   "title": "theme-selector",
   "description": "Choose a theme and color mode.",
-  "recordedOn": "2026-10-14",
-  "sourceRevision": "e1c4f28e0e95d13d9370282c35851b0ad95b0b48",
-  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+  "recordedOn": "2026-10-18",
+  "sourceRevision": "f8419e01544216ff22eab5e6651ca0401ad3e234",
+  "themeSourceRevision": "45b22049e87256e9327beb0b350e67fe81d7fc81",
   "mode": "normal",
   "fontSettings": "default",
   "scenario": "demo.js",
@@ -11,8 +11,8 @@
   "environment": {
     "platform": "win32",
     "arch": "x64",
-    "electron": "44.7.0",
-    "chrome": "152.0.7977.130",
+    "electron": "44.9.0",
+    "chrome": "152.0.7977.167",
     "devicePixelRatio": 1,
     "locale": "en-GB",
     "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
@@ -21,34 +21,35 @@
   },
   "viewport": { "width": 1100, "height": 720 },
   "cornerRadius": 10,
+  "privacy": { "version": 1, "location": "neutral", "textChecked": true },
   "sources": {
     "editor": {
-      "revision": "d0b1751fffac65f10a405545e5f01cf7ad05c0bb",
+      "revision": "10950c83cb6d964aadbcf4036af67c6484c1341d",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "package": {
-      "revision": "e1c4f28e0e95d13d9370282c35851b0ad95b0b48",
+      "revision": "f8419e01544216ff22eab5e6651ca0401ad3e234",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "theme-selector": {
-      "revision": "e1c4f28e0e95d13d9370282c35851b0ad95b0b48",
+      "revision": "f8419e01544216ff22eab5e6651ca0401ad3e234",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "aura-theme": {
-      "revision": "a95e92b66c9c479305b26d20d541da75542409d4",
+      "revision": "f0b36dad5c2ebc9f59e6a7f30d7f03202237d94b",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "one-theme": {
-      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+      "revision": "45b22049e87256e9327beb0b350e67fe81d7fc81",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "vscode-theme": {
-      "revision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+      "revision": "efb39c98fd4291026e62dc1f76e46b0b64869e63",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     }
@@ -65,7 +66,7 @@
       "label": "Choose a theme and color mode.",
       "width": 1100,
       "height": 720,
-      "sha256": "9203307cd49027d7b0b2bb3f05db516af1138e85e609d5d41e7cca9f0dce6a48"
+      "sha256": "8a42579b9fad14dcee68db0183c702492e7e39c15a0925babcbb3a8f2ab33572"
     }
   ]
 }
